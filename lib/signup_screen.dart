@@ -9,56 +9,64 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  TextEditingController _confirmedPassTEController = TextEditingController();
-  TextEditingController _emailTEController = TextEditingController();
-  TextEditingController _passwordTEController = TextEditingController();
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final TextEditingController _confirmedPassTEController =
+      TextEditingController();
+  final TextEditingController _emailTEController = TextEditingController();
+  final TextEditingController _passwordTEController = TextEditingController();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
         key: _formkey,
-        child: Column(
-          spacing: 8,
-          children: [
-            TextFormField(
-              controller: _emailTEController,
-              decoration: InputDecoration(hintText: "Email"),
-              validator: (String? value) {
-                if (value?.trim().isEmpty ?? true) {
-                  return "Enter a valid Email";
-                }
-                return null;
-              },
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            spacing: 8,
+            children: [
+              SizedBox(height: 40),
+              TextFormField(
+                controller: _emailTEController,
+                decoration: InputDecoration(hintText: "Email"),
+                validator: (String? value) {
+                  if (value?.trim().isEmpty ?? true) {
+                    return "Enter a valid Email";
+                  }
+                  return null;
+                },
+              ),
 
-            TextFormField(
-              controller: _passwordTEController,
-              decoration: InputDecoration(hintText: "password"),
-              validator: (String? value) {
-                if (value?.trim().isEmpty ?? true) {
-                  return "Enter a valid password";
-                }
-                return null;
-              },
-            ),
+              TextFormField(
+                controller: _passwordTEController,
+                decoration: InputDecoration(hintText: "password"),
+                validator: (String? value) {
+                  if (value?.trim().isEmpty ?? true) {
+                    return "Enter a valid password";
+                  }
+                  return null;
+                },
+              ),
 
-            TextFormField(
-              controller: _confirmedPassTEController,
-              decoration: InputDecoration(hintText: "password"),
-              validator: (String? value) {
-                if (value?.trim().isEmpty ?? true) {
-                  return "Enter a valid password";
-                } else if (_passwordTEController !=
-                    _confirmedPassTEController) {
-                  return "Don't macth confirmed password";
-                }
-                return null;
-              },
-            ),
-            FilledButton(onPressed: onTapSubmitButton, child: Text("Register")),
-          ],
+              TextFormField(
+                controller: _confirmedPassTEController,
+                decoration: InputDecoration(hintText: "password"),
+                validator: (String? value) {
+                  if (value?.trim().isEmpty ?? true) {
+                    return "Enter a valid password";
+                  } else if (_confirmedPassTEController.text !=
+                      _passwordTEController.text) {
+                    return "Don't macth confirmed password";
+                  }
+                  return null;
+                },
+              ),
+              FilledButton(
+                onPressed: onTapSubmitButton,
+                child: Text("Register"),
+              ),
+            ],
+          ),
         ),
       ),
     );

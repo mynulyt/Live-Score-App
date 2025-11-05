@@ -10,8 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<FootballMatch> _matchList = [];
-  bool _inProgress = false;
+  final List<FootballMatch> _matchList = [];
+  final bool _inProgress = false;
 
   // @override
   // void initState() {
