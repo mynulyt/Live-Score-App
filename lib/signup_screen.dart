@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -8,9 +9,9 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  TextEditingController confirmedPassTEController = TextEditingController();
-  TextEditingController emailTEController = TextEditingController();
-  TextEditingController passwordTEController = TextEditingController();
+  TextEditingController _confirmedPassTEController = TextEditingController();
+  TextEditingController _emailTEController = TextEditingController();
+  TextEditingController _passwordTEController = TextEditingController();
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   @override
@@ -22,7 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
           spacing: 8,
           children: [
             TextFormField(
-              controller: emailTEController,
+              controller: _emailTEController,
               decoration: InputDecoration(hintText: "Email"),
               validator: (String? value) {
                 if (value?.trim().isEmpty ?? true) {
@@ -33,7 +34,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
 
             TextFormField(
-              controller: passwordTEController,
+              controller: _passwordTEController,
               decoration: InputDecoration(hintText: "password"),
               validator: (String? value) {
                 if (value?.trim().isEmpty ?? true) {
@@ -44,21 +45,52 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
 
             TextFormField(
-              controller: confirmedPassTEController,
+              controller: _confirmedPassTEController,
               decoration: InputDecoration(hintText: "password"),
               validator: (String? value) {
                 if (value?.trim().isEmpty ?? true) {
                   return "Enter a valid password";
-                } else if (passwordTEController != confirmedPassTEController) {
+                } else if (_passwordTEController !=
+                    _confirmedPassTEController) {
                   return "Don't macth confirmed password";
                 }
                 return null;
               },
             ),
-            FilledButton(onPressed: () {}, child: Text("Register")),
+            FilledButton(onPressed: onTapSubmitButton, child: Text("Register")),
           ],
         ),
       ),
     );
+  }
+
+  void onTapSubmitButton() {
+    if (_formkey.currentState!.validate()) {
+      _createNewUser();
+    }
+  }
+
+  Future<void> _createNewUser() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailTEController.text.trim(),
+        password: _passwordTEController.text,
+      );
+      showSnackBar('Register success');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak password') {
+        showSnackBar('The password provide is too weak');
+      } else if (e.code == 'emai-already-in-used') {
+        showSnackBar("The email is already exit");
+      }
+    } catch (e) {
+      showSnackBar(e.toString());
+    }
+  }
+
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }
