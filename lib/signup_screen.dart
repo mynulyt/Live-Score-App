@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:live_score/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -64,6 +65,15 @@ class _SignupScreenState extends State<SignupScreen> {
               FilledButton(
                 onPressed: onTapSubmitButton,
                 child: Text("Register"),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => LoginScreen()),
+                  );
+                },
+                child: Text("go to Login screen"),
               ),
             ],
           ),
