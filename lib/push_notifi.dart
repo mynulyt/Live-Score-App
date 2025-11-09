@@ -1,7 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-
-import 'app.dart';
 
 class FCMService {
   static Future<void> initialize() async {
@@ -38,7 +35,6 @@ class FCMService {
   static void onTokenRefresh() {
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       print(newToken);
-      // Call update Token API
     });
   }
 }
